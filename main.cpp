@@ -15,6 +15,7 @@
 //TODO: resource na zaklade $HOSTNAME
 #include <iostream>
 #include <fstream>
+#include <cstring>
 #include "version.h"
 #include "bot.h"
 
@@ -28,6 +29,9 @@ int init_log();
 
 int main(int argc, char *argv[])
 {
+	if ((argc == 2)&&(!strcmp(argv[1],"-v"))) {
+		cout << AutoVersion::FULLVERSION_STRING << endl;
+		return 0;}
     handle_argv(argc, argv);
 	ifstream fin;
 	string configfile;
