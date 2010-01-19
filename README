@@ -1,0 +1,35 @@
+Catamaran - program for controlling PC over the XMPP/Jabber
+released under GNU/GPL v.3
+
+Garret Raziel, Boloomka int.
+2009
+
+Alpha Release
+
+- Installation
+ this is alpha release, no installation requied/supported.
+ just only compile with ``make''
+ need gloox libraries (downloable from www.camaya.net) and g++
+
+- Running
+ type "./catamaran" from your favourite console emulator
+ if no args given, reads your password and JID from tamara.conf
+ if there is none such a file, it will ask you for JID and pass and create it
+ you must create account on Jabber server manualy and add yourself to its roster
+ when program succesfully starts, you can see that the bot is online in your own roster
+ everything that you'll send to it will be called on host system of catamaran program
+ try to send ``ls'' to it, it sends you back an output of this command
+
+- Arguments
+ only one, call
+ ``./catamaran file''
+ where file is configuration file with your JID and password, formated as
+ 
+ JID: yourjid@jabberserver.com
+ Password: PasswordOfYourAcc
+
+ if none args with configuration given, default is tamara.conf
+
+- Authors
+ Jan "Garret Raziel" Sedlák
+ if any questions, email me on boloomka@gmail.com or on garretraziel@jabber.cz
