@@ -1,5 +1,4 @@
 #include "bot.h"
-//TODO: Message event a ChatState je presnej opak nez jsem si myslel, reimplementovat
 void Bot::initiate(string aJID,string aPASS,string bPASS)
 {
 	JID jid( aJID );
