@@ -12,6 +12,7 @@
 //TODO: registrace na serveru
 //TODO: ovladani na zaklade Ad-Hoc (mozna)
 //TODO: resource na zaklade $HOSTNAME (mozna)
+//TODO: GUI, mozna na zaklade ncurses
 #include <iostream>
 #include <fstream>
 #include "version.h"
