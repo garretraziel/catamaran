@@ -1,4 +1,8 @@
 #include "bot.h"
+<<<<<<< HEAD
+=======
+//TODO: Message event a ChatState je presnej opak nez jsem si myslel, reimplementovat
+>>>>>>> e2d5bf0779ad4e07a38eeaf5eb781d9d462fdd76
 void Bot::initiate(string aJID,string aPASS,string bPASS)
 {
 	JID jid( aJID );
@@ -170,7 +174,10 @@ int Bot::add_blocklist(string block_jid)
 	PrivacyItem item (PrivacyItem::TypeJid, PrivacyItem::ActionDeny, PrivacyItem::PacketMessage, block_jid);
 	list.push_back( item );
 	p -> store ("BlockList",list);
+<<<<<<< HEAD
 	cout << "Blocklist stored, " << block_jid << " added.\n";
 	m_session->send("Blocklist stored, "+block_jid+" added.","Blocklist");
+=======
+>>>>>>> e2d5bf0779ad4e07a38eeaf5eb781d9d462fdd76
 	return 0;
 }
