@@ -3,7 +3,7 @@
 //TODO: nacitani, parsovani konfiguraku
 //TODO: trace chyb pripojeni
 //TODO: akce pri zachyceni
-//TODO: user mod<<<<<<< HEAD
+//TODO: user mod
 //TODO: heslovani
 //TODO: zapouzdreni do objektu
 //TODO: logovani
@@ -46,7 +46,9 @@ int main(int argc, char *argv[])
 	string sJID;
 	string spass;
 	string bpass;
-	//TODO: poresit tuhle zhovadilost
+	bool log = false;
+	//TODO: implementovat tohle
+	//parse_config(configfile.c_str(),sJID,spass,bpass,log);
 	if (!fin.good())
 	{
 	  fin.close();
@@ -81,13 +83,14 @@ int main(int argc, char *argv[])
 	  fin >> bpass;
 	  fin >> bpass;
 	  fin.get();
+	  fin.close();
 	}
 	cout << "# Ready for initiate\n";
 	cout << "# JID is: " << sJID << endl;
 	cout << "# pass is: " << spass << endl;
 	cout << "# pass for bot is: " << bpass << endl;
 	Bot* client = new Bot;
-	client -> initiate(sJID,spass,bpass);
+	client -> initiate(sJID,spass,bpass,log);
 	// mohlo by to mit gabbage collector
 	delete ( client );
 	return 0;
@@ -98,8 +101,21 @@ int handle_argv(int argc, char *argv[])
 	return 0;
 }
 
-int parse_config()
+int parse_config(char* file, string& sJID, string& spass, string& bpass, bool& log)
 {
+    ifstream fin;
+    fin.open(file);
+    while (fin.good())
+    {
+        string conf;
+        fin >> conf;
+        if ((conf=="JID:")||(conf=="jid:")) fin >> sJID;
+        else if ((conf=="Password:")||(conf=="password:")||(conf=="PASSWORD:")) fin >> spass;
+        else if ((conf=="BotPassword:")||(conf=="botpassword:")||(conf=="BOTPASSWORD:")) fin >> bpass;
+        else if ((conf=="log:")||(conf=="Log:")||(conf=="LOG:")) {string logs; fin >> logs;
+            if ((logs=="true")||(logs=="TRUE")||(logs=="T")||(logs=="t")) log = true; else log = false;}
+    }
+    fin.close();
 	return 0;
 }
 

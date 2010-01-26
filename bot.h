@@ -33,8 +33,8 @@ class Bot : public ConnectionListener, PresenceHandler, MessageSessionHandler,
  MessageHandler, MessageEventHandler, ChatStateHandler, PrivacyListHandler
 {
 public:
-	Bot() {unpassed=false; handlerJid = "";expmode = false;}
-	void initiate(string aJID,string aPASS,string bPASS);
+	Bot() {unpassed=false; handlerJid = "";expmode = false;log = false;}
+	void initiate(string aJID,string aPASS,string bPASS,bool log_arg);
 	virtual void handlePresence(const Presence& presence );
 	virtual void onDisconnect(ConnectionError error);
 	virtual void onConnect();
@@ -57,12 +57,13 @@ private:
 	string bpass;
 	bool expmode;
 	bool unpassed;
+	bool log;
 	string handlerJid;
 	int add_command();
 	int do_command();
 	int exp_mode(){expmode=!expmode;return 0;};
 	int send_file();
-	int log();
+	int do_log();
 	int add_blocklist(string block_jid);
 };
 

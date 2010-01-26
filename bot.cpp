@@ -1,9 +1,10 @@
 #include "bot.h"
 //TODO: Message event a ChatState je presnej opak nez jsem si myslel, reimplementovat
-void Bot::initiate(string aJID,string aPASS,string bPASS)
+void Bot::initiate(string aJID,string aPASS,string bPASS,bool log_arg)
 {
 	JID jid( aJID );
 	bpass = bPASS;
+	log = log_arg;
 	cout << "# Debugstep 1\n";
 	client = new Client( jid, aPASS );
 	client -> registerConnectionListener( this );
@@ -156,10 +157,11 @@ int Bot::do_command()
 
 int Bot::send_file()
 {
+    //uvidime, jestli tohle vubec pujde udelat
 	return 0;
 }
 
-int Bot::log()
+int Bot::do_log()
 {
 	return 0;
 }
