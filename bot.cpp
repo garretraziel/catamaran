@@ -1,5 +1,4 @@
 #include "bot.h"
-//TODO: Message event a ChatState je presnej opak nez jsem si myslel, reimplementovat
 void Bot::initiate(string aJID,string aPASS,string bPASS,bool log_arg)
 {
 	JID jid( aJID );
@@ -53,6 +52,7 @@ void Bot::handlePresence(const Presence& presence )
 
 void Bot::onDisconnect(ConnectionError error)
 {
+    //TODO: handle: 16 bad password, 9 offline, 0 no problem
 	cout << "# Error: " << error << endl;
 }
 

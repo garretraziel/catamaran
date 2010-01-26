@@ -4,7 +4,6 @@
 //TODO: trace chyb pripojeni
 //TODO: akce pri zachyceni
 //TODO: user mod
-//TODO: heslovani
 //TODO: zapouzdreni do objektu
 //TODO: logovani
 //TODO: filetransfer
@@ -16,6 +15,7 @@
 //TODO: GUI, mozna na zaklade ncurses
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "version.h"
 #include "bot.h"
 #include "output.h"
@@ -25,7 +25,7 @@ using namespace std;
 
 int handle_argv(int argc, char *argv[]);
 
-int parse_config();
+int parse_config(const char* file, string& sJID, string& spass, string& bpass, bool& log);
 
 int init_log();
 
@@ -47,8 +47,6 @@ int main(int argc, char *argv[])
 	string spass;
 	string bpass;
 	bool log = false;
-	//TODO: implementovat tohle
-	//parse_config(configfile.c_str(),sJID,spass,bpass,log);
 	if (!fin.good())
 	{
 	  fin.close();
@@ -74,16 +72,8 @@ int main(int argc, char *argv[])
 	  fout << bpass << endl;
 	  fout.close();
     } else {
-	  fin >> sJID;
-	  fin >> sJID;
-	  fin.get();
-	  fin >> spass;
-	  fin >> spass;
-	  fin.get();
-	  fin >> bpass;
-	  fin >> bpass;
-	  fin.get();
-	  fin.close();
+        fin.close();
+        parse_config(configfile.c_str(),sJID,spass,bpass,log);
 	}
 	cout << "# Ready for initiate\n";
 	cout << "# JID is: " << sJID << endl;
@@ -101,7 +91,7 @@ int handle_argv(int argc, char *argv[])
 	return 0;
 }
 
-int parse_config(char* file, string& sJID, string& spass, string& bpass, bool& log)
+int parse_config(const char* file, string& sJID, string& spass, string& bpass, bool& log)
 {
     ifstream fin;
     fin.open(file);
