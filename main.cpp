@@ -1,6 +1,5 @@
 //TODO: konfigurace spusteni
 //TODO: parsovani argumentu
-//TODO: nacitani, parsovani konfiguraku
 //TODO: trace chyb pripojeni
 //TODO: akce pri zachyceni
 //TODO: user mod
@@ -13,6 +12,7 @@
 //TODO: ovladani na zaklade Ad-Hoc (mozna)
 //TODO: resource na zaklade $HOSTNAME (mozna)
 //TODO: GUI, mozna na zaklade ncurses
+//TODO: odpojovani clienta pomoci client -> disconnect()
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -58,11 +58,6 @@ int main(int argc, char *argv[])
 	  cout << "$ Pass: ";
 	  getline(cin,spass);
 	  cout << "$ Pass for bot: ";
-	  getline(cin,sJID);
-	  cout << "$ Pass: ";
-	  string spass;
-	  getline(cin,spass);
-	  cout << "$ Pass for bot: ";
 	  getline(cin,bpass);
 	  fout << "JID: ";
 	  fout << sJID << endl;
@@ -95,15 +90,17 @@ int parse_config(const char* file, string& sJID, string& spass, string& bpass, b
 {
     ifstream fin;
     fin.open(file);
+    string conf;
     while (fin.good())
     {
-        string conf;
         fin >> conf;
-        if ((conf=="JID:")||(conf=="jid:")) fin >> sJID;
-        else if ((conf=="Password:")||(conf=="password:")||(conf=="PASSWORD:")) fin >> spass;
-        else if ((conf=="BotPassword:")||(conf=="botpassword:")||(conf=="BOTPASSWORD:")) fin >> bpass;
+        if ((conf=="JID:")||(conf=="jid:")) {fin >> sJID; getline(fin,conf);}
+        else if ((conf=="Password:")||(conf=="password:")||(conf=="PASSWORD:")) {fin >> spass; getline(fin,conf);}
+        else if ((conf=="BotPassword:")||(conf=="botpassword:")||(conf=="BOTPASSWORD:")) {fin >> bpass; getline(fin,conf);}
         else if ((conf=="log:")||(conf=="Log:")||(conf=="LOG:")) {string logs; fin >> logs;
-            if ((logs=="true")||(logs=="TRUE")||(logs=="T")||(logs=="t")) log = true; else log = false;}
+            if ((logs=="true")||(logs=="TRUE")||(logs=="T")||(logs=="t")) log = true; else log = false; getline(fin,conf);}
+        else if (conf[0]=='/'&&conf[1]=='/') getline(fin,conf);
+        else if (conf=="") ; else cout << "# Error parsing from config file: \"" << conf << "\" means nothing\n";
     }
     fin.close();
 	return 0;
