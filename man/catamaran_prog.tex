@@ -1,0 +1,55 @@
+\documentclass[a4paper,11pt,titlepage]{article}
+\usepackage[czech]{babel}
+\usepackage[utf8]{inputenc}
+\pagestyle{headings}
+\author{Jan Sedlák}
+\title{Programátorský manuál programu catamaran}
+\frenchspacing
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{O programu catamaran}
+Program catamaran slouží pro jednoduché vzdálené přihlášení a ovládání počítače přes internet, přes protokol XMPP\footnote{XMPP je protokol sloužící k instant messagingu, Jabber}.
+Pomocí multiplatformní C++ knihovny \emph{gloox} se catamaran připojí na zadaný účet na XMPP serveru (gmail.com, jabbim.cz\ldots). Daný kontakt si uživatel přidá do svého seznamu kontaktů
+a poté pomocí zasílání jednoduchých zpráv (stejně jako např. při psaní před ICQ) předává catamaranu příkazy pro vykonání na hostitelském počítači. Program catamaran příkaz vykoná
+a textový výstup z vykonaného příkazu (programu) pošle uživateli zprávou zpět. Například, pokud uživatel zašle programu catamaran příkaz `ls', catamaran pošle uživateli zpět výpis
+souborů v aktuální složce (na platformě Windows by uživatel použil příkaz `dir').
+
+Program catamaran je psán pro platformu Linux, avšak díky použitému jazyku (C++) a multiplatformní knihovně gloox není problém kompilace na jakýkoliv jiný Unix či dokonce platformu Windows.
+Avšak kvůli zvlášnímu chování cstdlib\footnote{standardní knihovna jazyka C pro vstup a výstup} catamaran na Windows příkaz provede, ale nebude schopen zaslat zpět výstup z tohoto příkazu.
+\newpage
+\section{Struktura a členění zdrojových kódů}
+Program je jednoduše rozčleněn do několika souborů: bot.cpp, bot.h, LICENCE, main.cpp, Makefile, README, tamara.conf a version.h. Soubor main.cpp obsahuje funkci `main' (což je funkce hlavního
+program) a funkci `parse\_config'. Funkce `parse\_config' je funkce, která slouží pro parsování konfiguračního souboru. Funkce jednoduše prochází konfigurační soubor a podle přečtených hodnot
+nastaví objekt bot. Funkce main přečte (či nastaví) konfigurační soubor, pomocí parse\_config z něho dostane informace, vytvoří objekt, `client', což je instance třídy Bot (která se stará
+o veškeré věci ohledně zachycování a provádění zpráv) a zavolá jeho metodu initiate (což je něco jako konstruktor). V tuto chvíli se catamaran připojí na účet a celý program spočívá na
+volání metod objektu Bot. Vzhledem k charakteru úlohy je princip fungování Bota event-driven. 
+
+Event-driven znamená \uv{řízené událostmi} - catamaran neprovádí kód shora dolů jako standardní
+programy, místo toho je program zastaven a čeká, než se stane nějaká událost (přijetí zprávy a podobně). Tímto se dostáváme k souborům bot.cpp a bot.h (bot.h je hlavičkový soubor k souboru
+bot.cpp). Zde jsou metody objektu Bot. Metoda `initiate' nastaví hodnoty hesla a účtu a připojí se na XMPP. Je volána na začátku programu. Metoda onConnect se zavolá jakmile se catamaran
+připojí, zde se akorát vypíše hlášení do konzole. Metoda handlePresence se zavolá, změní-li se presence některého z kontaktů - pokud se např. kontakt odpojí apod. Metoda onDisconnect se zavolá
+když se catamaran odhlásí - vypíše se chybové hlášení odpojení. 0 znamená, že vše proběhlo v pořádku. Metoda handleMessageSession se zavolá, pokud někdo vytvoří novou message session s
+catamaranem, tudíž pokud někdo catamaranu poprvé napíše zprávu. Metoda handleMessage je jádrem celého programu. Zde se příjme zpráva, pokud je catamaran pro daný kontakt odheslovaný tak se
+zpráva provede a výstup se pošle zpět. Zde je část kódu provedení zprávy:
+\begin{verbatim}
+{
+	FILE* outp;
+	string outps="";
+	uint32_t znak;
+	outp = popen(message.body().c_str(),"r");
+	while((znak = getc(outp))!=EOF) outps+=znak;
+	pclose(outp);
+	cout << "& Output from command: " << outps << endl;
+	if (outps!="") session->send(outps,"Output");
+}
+\end{verbatim}
+Další metodou je add\_blocklist. Program catamaran zatím neumí tuto metodu využívat. Zde lze přidat příkazem nějaký kontakt do blocklistu.
+
+Další soubory již v krátkosti - ve version.h se uchovává číslování aktuální verze, tamara.conf je implicitní konfigurační soubor, Makefile je soubor pro kompilaci pomocí programu GNU/make,
+LICENCE obsahuje text licence GNU/GPL v3 a README obsahuje jednoduché krátké info o programu.
+\section{Licence}
+Program catamaran je uvolněn pod licenci GNU/GPL v3, jejiž plné znění najdete v souboru LICENCE, který by měl být distribuován zároveň s programem.
+(g) 2010 Jan Sedlák
+\end{document}
