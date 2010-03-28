@@ -1,0 +1,77 @@
+\documentclass[a4paper,11pt,titlepage]{article}
+\usepackage[czech]{babel}
+\usepackage[utf8]{inputenc}
+\pagestyle{headings}
+\author{Jan Sedlák}
+\title{Uživatelský manuál programu catamaran}
+\frenchspacing
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{O programu catamaran}
+Program catamaran slouží pro jednoduché vzdálené přihlášení a ovládání počítače přes internet, přes protokol XMPP\footnote{XMPP je protokol sloužící k instant messagingu, Jabber}.
+Pomocí multiplatformní C++ knihovny \emph{gloox} se catamaran připojí na zadaný účet na XMPP serveru (gmail.com, jabbim.cz\ldots). Daný kontakt si uživatel přidá do svého seznamu kontaktů
+a poté pomocí zasílání jednoduchých zpráv (stejně jako např. při psaní před ICQ) předává catamaranu příkazy pro vykonání na hostitelském počítači. Program catamaran příkaz vykoná
+a textový výstup z vykonaného příkazu (programu) pošle uživateli zprávou zpět. Například, pokud uživatel zašle programu catamaran příkaz `ls', catamaran pošle uživateli zpět výpis
+souborů v aktuální složce (na platformě Windows by uživatel použil příkaz `dir').
+
+Program catamaran je psán pro platformu Linux, avšak díky použitému jazyku (C++) a multiplatformní knihovně gloox není problém kompilace na jakýkoliv jiný Unix či dokonce platformu Windows.
+Avšak kvůli zvlášnímu chování cstdlib\footnote{standardní knihovna jazyka C pro vstup a výstup} catamaran na Windows příkaz provede, ale nebude schopen zaslat zpět výstup z tohoto příkazu.
+\newpage
+\section{Ovládání}
+Ovládání programu catamaran můžeme rozdělit na dvojí - ovládání programu catamaran pomocí konzole na hostitelském systému a ovládání programu catamaran pomocí příkazů přes XMPP.
+\subsection{Ovládání na hostitelském systému}
+Ovládání na hostitelském systému je jednoduché. Program catamaran spus\-tí\-te (v Linuxu příkaz `./catamaran' spuštěný ve složce s programem) a necháte ho, ať se připojí.
+Pokud se jedná o první spuštění ($\Rightarrow$ neexistuje konfigurační soubor), provede Vás program jednoduchým nastavením účtu na který se má catamaran připojit, heslem k účtu,
+heslem ke catamaranu a poté se podle zadaných informací připojí. Pokud soubor s nastavením existuje, rovnou se připojí. Implicitní soubor s nastavením se jmenuje `tamara.conf', který je
+umístěn ve složce s programem. Pokud spustíte catamaran a jako parametr mu předáte cestu k souboru, připojí se program catamaran podle informací obsažených v předaném souboru (toto je
+obzvláště výhodné např. pro bashovské scripty). Další informace o konfiguračních souborech naleznete v sekci \ref{konfigurak}. Pokud program catamaran spustíte s parametrem `-h', vypíše
+se krátká nápověda, obsažená v souboru README. Pokud program catamaran spustíte s parametrem `-v', vypíší se informace o verzi programu. Pokud program běží, vypisuje do konzole
+spoustu informací (např. kdo je připojen, kdo se odpojil, kdo zadal heslo, kdo poslal jaký příkaz a podobně). Obecně se jedná o tyto informace:
+\begin{itemize}
+\item informace začínající `\#' jsou takzvané void eventy, události při kterých se vykonala nějaká činnost, ale neměla žádný výstup. Obecně se jedná například o
+debugstepy, události když se catamaran připojí na server, informace o připojených klientech apod.
+\item informace začínající `@' jsou příkazy, které catamaran obdržel od u\-ži\-va\-te\-le a chystá se je vykonat
+\item informace začínající `\&' jsou výstupy z těchto příkazů
+\item informace začínající `\$' očekávají vstup od uživatele na hostitelském počítači, používají se například při vytváření konfiguračního souboru
+\end{itemize}
+Program catamaran se ukončíte příkazem pro ukončení programu, například na Linuxu v terminále zmáčknete kombinaci tlačítek `Ctrl+c'.
+\subsection{Ovládání přes XMPP}
+Ovládání přes protokol XMPP je jednoduché. Ve chvíli kdy se catamaran připojí a vy ho máte ve svém seznamu kontaktů (před prvním použitím catamaranu je potřeba vytvořit catamaranu
+nějaký účet, přidat si ho do svého osobního seznamu kontaktů a poté se ještě ručně připojit na tento účet a povolit přidání do seznamu), zapněte svého oblíbeného klienta pro XMPP (Jabber).
+Před posíláním příkazů musíte catamaranu nejdřív poslat heslo, které je nastaveno v konfiguračním souboru a poté mu můžete posílat příkazy. Jakýkoliv příkaz, co catamaran dostane vykoná,
+a výstup pošle zpět. Můžete takhle spoustět programy a číst si jejich výstupy na dálku. Výhodou je, že k ovládání catamaranu postačí jakýkoliv klient pro XMPP, catamaran můžete ovládat
+i například přes svůj mobilní telefon.
+\subsection{Příklad}
+Příklad je jednoduchý. Spusťte catamaran, on se připojí na účet. Zapněte odkudkoliv jakéhokoliv klienta na XMPP a přihlašte se na svůj účet, kde máte účet catamaranu přidám mezi kontakty.
+Caramaran bude online. Pošlete mu příkaz `cat README' a on vám zpět pošle obsah textového souboru README. Pošlete mu `whoami' a on vám pošle název účtu, na kterém je spuštěn. Příkazy
+samozřejmě nejsou příkazy pro catamaran ale pro operační systém (cat i whoami jsou programy pro Linux). Na Windows mu tedy pošlete příkazy, které by jste použili při ovládání OS z příkazového
+řádku.
+\newpage
+\section{Konfigurační soubor}
+\label{konfigurak}
+Účet na který se catamaran připojuje, heslo k účtu, heslo k catamaranu a podobně se uchovávají v konfiguračním souboru. Defaultně se tento soubor jmenuje `tamara.conf', avšak díky parametrům
+mu můžete předat jakýkoliv jiný textový soubor s nastavením. Catamaran umí parsovat tento konfigurační soubor, avšak ten musí mít určitou formu:
+\begin{itemize}
+\item účet na který se má catamaran připojit musí být uvozen řetězcem `JID: ', bezprostředně za kterým následuje účet ve formátu \\ jid@server.dom/Resource
+\item heslo k tomuto účtu ve formátu `Password: ' + heslo
+\item heslo pro catamaran ve formátu `BotPassword: ' + heslo pro catamaran
+\item komentáře pro konfigurační soubor jsou uvozeny dvěma znaky `//', parser přeskočí vše až do konce řádků
+\item jakýkoliv jiný text parser catamaranu vrátí jako chybu - vypíše zprávu `\# Error parsing from config file: X means nothing', kde X je nalezený neplatný řetězec
+\end{itemize}
+Pokud si jakkoliv nejste jistí formou konfiguračního souboru, nechejte ať catamaran vytvoří konfigurační soubor za Vás - stačí ho pouze pustit, když žádný konfigurační soubor neexistuje.
+\section{Omezení použití}
+Catamaran je možno použít pro konzolové aplikace, vyjma aplikací pou\-ží\-vají\-cích ke svému běhu knihovnu \emph{ncurses} (grafická knihovna pro konzoli), kterou používají různé uživatelské 
+aplikace, které potřebují alespoň jednoduché GUI - konzolový webový prohlížeč, konzolový textový editor a podobně. V catamaranu také ze zásady \uv{nefunguje} (a nikdy \uv{fungovat} nebude) 
+program \emph{cd} (sloužící pro změnu aktuálního adresáře), tudíž je potřeba všechny operace nad soubory volat s jejich cestou. Nemůžete například napsat \emph{cd adresar} a pak 
+\emph{rm soubor} ale je potřeba napsat rovnou \emph{rm adresar/soubor}. Tento nedostatek je způsoben chováním cd a způsobem, jakým sys\-tém spou\-ští scripty. Mezi další omezení patří
+omezení fungování na platformě Windows. Kvůli zvláštnímu chování standardní C knihovny pro vstup a výstup na Windows, můžete pomocí catamaranu spouštět programy, avšak catamaran Vám nebude
+vracet výstup.
+\section{O vývoji}
+Progran catamaran byl vyvinut jako maturitní práce Jana Sedláka v roce 2009/2010. Je napsán v objetově orientovaném jazyce C++, používá objektovou knihovnu gloox\footnote{www.camaya.net}
+pro připojení na XMPP. Pro kompilaci byl použít GNU/GPL kompiler GCC s nadstavbou G++ pro kompilaci jazyka C++. Tento manuál byl vysázen v programu \LaTeX
+\section{Licence}
+Program catamaran je uvolněn pod licenci GNU/GPL, jejiž plné znění najdete v souboru LICENCE, který by měl být distribuován zároveň s programem.
+(g) 2010 Jan Sedlák
+\end{document}
