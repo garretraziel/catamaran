@@ -101,19 +101,13 @@ void Bot::handleMessage(const Message& message, MessageSession* session)
 		else
 		{
 			FILE* outp;
-			char buffer[100];
 			string outps="";
+			uint32_t znak;
 			outp = popen(message.body().c_str(),"r");
-			while (true)
-			{
-				fgets(buffer,100,outp);
-				if (feof(outp))
-					break;
-				outps=outps+buffer;
-			}
+			while((znak = getc(outp))!=EOF) outps+=znak;
 			pclose(outp);
 			cout << "& Output from command: " << outps << endl;
-			if (outps!="") session->send(outps.c_str(),"Output");
+			if (outps!="") session->send(outps,"Output");
 		}
 	}
 }

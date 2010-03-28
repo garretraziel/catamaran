@@ -6,6 +6,7 @@
 #include <string>
 #include <cstring>
 #include <cstdlib>
+#include <stdint.h>
 #include <gloox/gloox.h>
 #include <gloox/client.h>
 #include <gloox/clientbase.h>
