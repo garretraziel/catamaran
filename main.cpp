@@ -37,6 +37,18 @@ int main(int argc, char *argv[])
 	if ((argc == 2)&&(!strcmp(argv[1],"-h"))) {
 		system("cat README");
 		return 0;}
+    FILE* outp;
+    string outps = "";
+    uint32_t znak;
+    outp = popen("id -u","r");
+    while ((znak=getc(outp))!='\n') outps+=znak;
+    pclose(outp);
+    if (outps=="0") {
+        cout << "# Not so good idea to run under root. Continue anyway? y/n ";
+        string potvrzeni;
+        getline(cin,potvrzeni);
+        if (potvrzeni=="n") return 0;
+    }
     handle_argv(argc, argv);
 	ifstream fin;
 	string configfile;
