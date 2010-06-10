@@ -50,52 +50,52 @@ int main(int argc, char *argv[])
         if (potvrzeni=="n") return 0;
     }
     handle_argv(argc, argv);
-	ifstream fin;
-	string configfile;
-	if (argc>1) configfile = argv[1];
-	else configfile = "tamara.conf";
-	fin.open(configfile.c_str());
-	string sJID;
-	string spass;
-	string bpass;
-	bool log = false;
-	if (!fin.good())
-	{
-	  fin.close();
-	  ofstream fout;
-	  fout.open(configfile.c_str());
-	  cout << "@ Creating configuration file:\n";
-	  cout << "$ JID: ";
-	  getline(cin,sJID);
-	  cout << "$ Pass: ";
-	  getline(cin,spass);
-	  cout << "$ Pass for bot: ";
-	  getline(cin,bpass);
-	  fout << "JID: ";
-	  fout << sJID << endl;
-	  fout << "Password: ";
-	  fout << spass << endl;
-	  fout << "BotPassword: ";
-	  fout << bpass << endl;
-	  fout.close();
+    ifstream fin;
+    string configfile;
+    if (argc>1) configfile = argv[1];
+    else configfile = "tamara.conf";
+    fin.open(configfile.c_str());
+    string sJID;
+    string spass;
+    string bpass;
+    bool log = false;
+    if (!fin.good())
+    {
+      fin.close();
+      ofstream fout;
+      fout.open(configfile.c_str());
+      cout << "@ Creating configuration file:\n";
+      cout << "$ JID: ";
+      getline(cin,sJID);
+      cout << "$ Pass: ";
+      getline(cin,spass);
+      cout << "$ Pass for bot: ";
+      getline(cin,bpass);
+      fout << "JID: ";
+      fout << sJID << endl;
+      fout << "Password: ";
+      fout << spass << endl;
+      fout << "BotPassword: ";
+      fout << bpass << endl;
+      fout.close();
     } else {
-        fin.close();
-        parse_config(configfile.c_str(),sJID,spass,bpass,log);
-	}
-	cout << "# Ready for initiate\n";
-	cout << "# JID is: " << sJID << endl;
-	cout << "# pass is: " << spass << endl;
-	cout << "# pass for bot is: " << bpass << endl;
-	Bot* client = new Bot;
-	client -> initiate(sJID,spass,bpass,log);
-	// mohlo by to mit gabbage collector
-	delete ( client );
-	return 0;
+      fin.close();
+      parse_config(configfile.c_str(),sJID,spass,bpass,log);
+    }
+    cout << "# Ready for initiate\n";
+    cout << "# JID is: " << sJID << endl;
+    cout << "# pass is: " << spass << endl;
+    cout << "# pass for bot is: " << bpass << endl;
+    Bot* client = new Bot;
+    client -> initiate(sJID,spass,bpass,log);
+    // mohlo by to mit gabbage collector
+    delete ( client );
+    return 0;
 }
 
 int handle_argv(int argc, char *argv[])
 {
-	return 0;
+    return 0;
 }
 
 int parse_config(const char* file, string& sJID, string& spass, string& bpass, bool& log)
@@ -120,5 +120,5 @@ int parse_config(const char* file, string& sJID, string& spass, string& bpass, b
 
 int init_log()
 {
-	return 0;
+    return 0;
 }
