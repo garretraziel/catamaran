@@ -7,6 +7,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <stdint.h>
+#include <ctime>
 #include <gloox/gloox.h>
 #include <gloox/client.h>
 #include <gloox/clientbase.h>
@@ -66,6 +67,9 @@ private:
 	int send_file();
 	int do_log();
 	int add_blocklist(string block_jid);
+	int remove_blocklist(string allow_jid);
+	int do_spec(string whatdo);
+	int number_repeated_conn;
 };
 
 
