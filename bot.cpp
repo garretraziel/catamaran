@@ -246,5 +246,6 @@ int Bot::do_spec(string whatdo)
     cout << "# Disconnecting at: " << cas;
     client -> disconnect();
   }
+  // add new catamaran specific commands
   return 0;
 }
